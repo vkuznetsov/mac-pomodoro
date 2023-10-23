@@ -54,7 +54,6 @@ class PomodoroStatusBarApp(rumps.App):
         self.settings = settings
         self.restartTimer(None)
 
-
     def restartTimer(self, _):
         self.resetRemainingTicks()
         self.updateState(State.RUNNING)
@@ -102,7 +101,9 @@ class PomodoroStatusBarApp(rumps.App):
                 self.updateState(State.RUNNING)
 
     def updateTitle(self):
-        remainingTimeStr = self.settings.displayRemainingTimeFn(self.remainingTicks * self.settings.tickInterval)
+        remainingTimeStr = self.settings.displayRemainingTimeFn(
+            self.remainingTicks * self.settings.tickInterval
+        )
         match self.state:
             case State.RUNNING:
                 self.title = self.settings.startSymbol + " " + remainingTimeStr
@@ -112,7 +113,9 @@ class PomodoroStatusBarApp(rumps.App):
                 self.title = self.settings.stopSymbol + " " + remainingTimeStr
 
     def resetRemainingTicks(self):
-        self.remainingTicks = math.ceil(self.settings.pomodoroInterval / self.settings.tickInterval)
+        self.remainingTicks = math.ceil(
+            self.settings.pomodoroInterval / self.settings.tickInterval
+        )
 
     def tick(self, _):
         self.updateTitle()
@@ -122,7 +125,9 @@ class PomodoroStatusBarApp(rumps.App):
                 self.resetRemainingTicks()
                 self.updateState(State.STOPPED)
                 self.updatePassedIntervals(self.passedIntervals + 1)
-                rumps.notification("Pomodoro", "Time out", self.passedItem.title, sound=True)
+                rumps.notification(
+                    "Pomodoro", "Time out", self.passedItem.title, sound=True
+                )
 
 
 if __name__ == "__main__":
