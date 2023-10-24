@@ -1,8 +1,7 @@
 import rumps
 import math
 from dataclasses import dataclass
-from datetime import timedelta
-from enum import Enum
+from datetime import timedelta, datetime
 from typing import Callable
 from quickmachotkey import quickHotKey, mask
 from quickmachotkey.constants import optionKey, shiftKey, kVK_ANSI_Grave
@@ -21,10 +20,23 @@ class Settings:
     )
 
 
-class State(Enum):
-    RUNNING = 1
-    PAUSED = 2
-    STOPPED = 3
+class TimerState:
+    pass
+
+
+@dataclass
+class RunningState(TimerState):
+    endTime: datetime
+
+
+@dataclass
+class PausedState(TimerState):
+    remainingTime: timedelta
+
+
+@dataclass
+class StoppedState(TimerState):
+    pass
 
 
 class PomodoroStatusBarApp(rumps.App):
@@ -52,82 +64,83 @@ class PomodoroStatusBarApp(rumps.App):
 
         self.timer = rumps.Timer(self.tick, settings.tickInterval.seconds)
         self.settings = settings
-        self.restartTimer(None)
+        self.updateState(StoppedState())
 
     def restartTimer(self, _):
-        self.resetRemainingTicks()
-        self.updateState(State.RUNNING)
+        self.updateState(RunningState(datetime.now() + self.settings.pomodoroInterval))
 
     def pauseTimer(self, _):
-        self.updateState(State.PAUSED)
+        match self.state:
+            case RunningState(endTime=endTime):
+                self.updateState(PausedState(endTime - datetime.now()))
 
     def continueTimer(self, _):
-        self.updateState(State.RUNNING)
-
-    def pause(self, _):
-        self.menu["Start"].state = not self.menu["Start"].state
+        match self.state:
+            case PausedState(remainingTime=remainingTime):
+                self.updateState(RunningState(datetime.now() + remainingTime))
 
     def clearIntervals(self, _):
         self.updatePassedIntervals(0)
-        self.resetRemainingTicks()
-        self.updateState(State.STOPPED)
+        self.updateState(StoppedState())
 
     def updatePassedIntervals(self, newValue):
         self.passedIntervals = newValue
         self.passedItem.title = f"{newValue} interval(s) passed"
 
-    def updateState(self, newstate: State):
+    def updateState(self, newstate: TimerState):
         self.state = newstate
         self.updateTitle()
         match newstate:
-            case State.RUNNING:
+            case RunningState():
                 self.pauseItem.set_callback(self.pauseTimer)
                 self.continueItem.set_callback(None)
                 self.timer.start()
-            case State.PAUSED:
+            case PausedState():
                 self.pauseItem.set_callback(None)
                 self.continueItem.set_callback(self.continueTimer)
                 self.timer.stop()
-            case State.STOPPED:
+            case StoppedState():
                 self.pauseItem.set_callback(None)
                 self.continueItem.set_callback(None)
                 self.timer.stop()
 
     def toggleState(self):
         match self.state:
-            case State.RUNNING:
-                self.updateState(State.PAUSED)
-            case State.PAUSED | State.STOPPED:
-                self.updateState(State.RUNNING)
+            case RunningState(endTime=endTime):
+                self.updateState(PausedState(endTime - datetime.now()))
+            case PausedState(remainingTime=remainingTime):
+                self.updateState(RunningState(datetime.now() + remainingTime))
+            case StoppedState():
+                self.updateState(
+                    RunningState(datetime.now() + self.settings.pomodoroInterval)
+                )
 
     def updateTitle(self):
-        remainingTimeStr = self.settings.displayRemainingTimeFn(
-            self.remainingTicks * self.settings.tickInterval
-        )
         match self.state:
-            case State.RUNNING:
+            case RunningState(endTime=endTime):
+                remainingTimeStr = self.settings.displayRemainingTimeFn(
+                    endTime - datetime.now()
+                )
                 self.title = self.settings.startSymbol + " " + remainingTimeStr
-            case State.PAUSED:
+            case PausedState(remainingTime=remainingTime):
+                remainingTimeStr = self.settings.displayRemainingTimeFn(remainingTime)
                 self.title = self.settings.pauseSymbol + " " + remainingTimeStr
-            case State.STOPPED:
+            case StoppedState():
+                remainingTimeStr = self.settings.displayRemainingTimeFn(
+                    self.settings.pomodoroInterval
+                )
                 self.title = self.settings.stopSymbol + " " + remainingTimeStr
-
-    def resetRemainingTicks(self):
-        self.remainingTicks = math.ceil(
-            self.settings.pomodoroInterval / self.settings.tickInterval
-        )
 
     def tick(self, _):
         self.updateTitle()
-        if self.state == State.RUNNING:
-            self.remainingTicks -= 1
-            if self.remainingTicks < 0:
-                self.resetRemainingTicks()
-                self.updateState(State.STOPPED)
-                self.updatePassedIntervals(self.passedIntervals + 1)
-                rumps.notification(
-                    "Pomodoro", "Time out", self.passedItem.title, sound=True
-                )
+        match self.state:
+            case RunningState(endTime=endTime):
+                if endTime <= datetime.now():
+                    self.updateState(StoppedState())
+                    self.updatePassedIntervals(self.passedIntervals + 1)
+                    rumps.notification(
+                        "Pomodoro", "Time out", self.passedItem.title, sound=True
+                    )
 
 
 if __name__ == "__main__":
