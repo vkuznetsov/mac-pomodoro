@@ -1,0 +1,99 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "6b6440862f487a296e0535a0dbb20c244788ad40e5e1d5dc8a7aab58ee5ec670"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.10"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "altgraph": {
+            "hashes": [
+                "sha256:1b5afbb98f6c4dcadb2e2ae6ab9fa994bbb8c1d75f4fa96d340f9437ae454406",
+                "sha256:642743b4750de17e655e6711601b077bc6598dbfa3ba5fa2b2a35ce12b508dff"
+            ],
+            "version": "==0.17.4"
+        },
+        "macholib": {
+            "hashes": [
+                "sha256:07ae9e15e8e4cd9a788013d81f5908b3609aa76f9b1421bae9c4d7606ec86a30",
+                "sha256:0e315d7583d38b8c77e815b1ecbdbf504a8258d8b3e17b61165c6feb60d18f2c"
+            ],
+            "version": "==1.16.3"
+        },
+        "modulegraph": {
+            "hashes": [
+                "sha256:5443e6d93c0b263f4ea309e2ff01312eef7c424dd51981a1e78e960c90e572b8",
+                "sha256:c914c8c95a0e10fe88505d4e9c2284b4e3dbc70943e306cc6567e36cc541bf4b"
+            ],
+            "version": "==0.19.6"
+        },
+        "py2app": {
+            "hashes": [
+                "sha256:8dbd5f638d1cf63d6479f3095922b4e030d13de83da6a2a802c58c7d0f9e0a8e",
+                "sha256:f8cd88624450317e95497c43ab22f36c956a70560c67cf8d99c597b5ad7b81b7"
+            ],
+            "index": "pypi",
+            "version": "==0.28.6"
+        },
+        "pyobjc-core": {
+            "hashes": [
+                "sha256:166666b5c380a49e8aa1ad1dda978c581e29a00703d82203216f3c65a3f397a4",
+                "sha256:198a0360f64e4c0148eed07b42d1de0545f56c498c356d1d5524422bb3352907",
+                "sha256:2843ca32e86a01ccee67d7ad82a325ddd72d754929d1f2c0d96bc8741dc9af09",
+                "sha256:3dd0a7b3acd7e0b8ffd3f5331b29a3aaebe79a03323e61efeece38627a6020b3",
+                "sha256:61ea5112a672d21b5b0ed945778707c655b17c400672aef144705674c4b95499",
+                "sha256:99b72cda4593e0c66037b25a178f2bcc6efffb6d5d9dcd477ecca859a1f9ae8e",
+                "sha256:a886b9d2a93210cab4ae72601ab005ca6f627fa2f0cc62c43c03ef1405067a11"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==10.0"
+        },
+        "pyobjc-framework-cocoa": {
+            "hashes": [
+                "sha256:0187cba228976a45f41116c74aab079b64bacb3ffc3c886a4bd8e472bf9be581",
+                "sha256:0a23db9ab99e338e1d8a268d873cc15408f78cec9946308393ca2241820c18b8",
+                "sha256:723421eff4f59e4ca9a9bb8ec6dafbc0f778141236fa85a49fdd86732d58a74c",
+                "sha256:80c22a8fc7f085746d9cd222adeca8fe6790e3e6ad7eed5fc70b32aa87c10adb",
+                "sha256:a3c66fe56a5156a818fbf056c589f8140a5fdb1dcb1f1075cb34d3755474d900",
+                "sha256:a81dabdc40268591e3196087388e680c6570fed1b521df9b04733cb3ece0414e",
+                "sha256:bf9020e85ead569021b15272dcd90207aab6c754093f520b11d4210a2efbdd06"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==10.0"
+        },
+        "quickmachotkey": {
+            "hashes": [
+                "sha256:024475f6117b64ceb883f360ff823356070d5dc6dd6a838c9b23bea0abdaf4fb",
+                "sha256:76a02c5920b112a3a9f6267cafd572b10bdd752ee4467d29e51806193380d8da"
+            ],
+            "index": "pypi",
+            "version": "==2023.3.4"
+        },
+        "rumps": {
+            "hashes": [
+                "sha256:17fb33c21b54b1e25db0d71d1d793dc19dc3c0b7d8c79dc6d833d0cffc8b1596"
+            ],
+            "index": "pypi",
+            "version": "==0.4.0"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87",
+                "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==68.2.2"
+        }
+    },
+    "develop": {}
+}
